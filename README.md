@@ -47,6 +47,28 @@ sudo amdgpu-install --usecase=hiplibsdk,rocm
 
 After everything has been done, `reboot` your system.
 
+### Case: amdgpu-install fails because of unmet dependencies
+
+As of October 2024, when installing ROCm on Ubuntu Noble (24.x) you may encounter an error message with the `amdgpu-install` command stating the following:
+
+```
+The following packages have unmet dependencies:
+ rocm-gdb : Depends: libtinfo5 but it is not installable
+            Depends: libncurses5 but it is not installable
+E: Unable to correct problems, you have held broken packages.
+```
+
+This is because Ubuntu noble repositories only include the version 6 of those libraries, but rocm-gdb required the version 5. To fix this, you need to manually download and install the version 5 of those packages:
+
+```
+wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb
+sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb
+
+wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libncurses5_6.3-2ubuntu0.1_amd64.deb
+sudo dpkg -i libncurses5_6.3-2ubuntu0.1_amd64.deb
+
+```
+
 ## Docker Engine Installation
 1. Install Docker Engine using bash script, run the following commands:
 ```
